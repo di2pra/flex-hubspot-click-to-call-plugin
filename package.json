@@ -1,0 +1,18 @@
+{
+  "name": "flex-hubspot-click-to-call-plugin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "flex-plugin pre-script-check"
+  },
+  "dependencies": {
+    "@twilio/flex-plugin-scripts": "5.1.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0"
+  },
+  "devDependencies": {
+    "@twilio/flex-ui": "2.0.0-beta.1",
+    "react-test-renderer": "17.0.2"
+  }
+}
