@@ -2,9 +2,11 @@
 
 A Twilio Flex Plugin to leverage your customer data from Hubspot and initiate an outbound call or an outbound SMS on Flex. This plugin uses the [Hubspot APIs](https://developers.hubspot.com/docs/api/overview) to retrieve your customer data from Hubspot. Twilio Serverless is used for the the backend.
 
+![Screenshot of the Twilio Flex Hubspot Click-to-Call & Outbound SMS Plugin](screenshot.png "Screenshot of the Twilio Flex Hubspot Click-to-Call & Outbound SMS Plugin")
+
 ## Prerequisite
 
-- Twilio Flex instance
+- Twilio Flex instance with Flex UI 2.0
 - Twilio Phone Number
 - Hubspot API Key is required to authenticate your API calls. [How to get your key?](https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key)
 - Twilio CLI tool with Flex Plugin and Serverless Plugin Extensions
@@ -51,7 +53,7 @@ Next, deploy the serverless functions by running:
 twilio serverless:deploy
 ```
 
-After the deployment, copy and keep the domain URL somewhere (example: `https://flex-hubspot-click-to-call-serverless-2478-dev.twil.io`)
+After the deployment, copy and keep the domain URL somewhere (example: `https://flex-hubspot-click-to-call-serverless-2'(8-xxx.twil.io`)
 
 Now you need to deploy the plugin, move to the root folder, and make a copy of the .env.sample file by running:
 ```bash
