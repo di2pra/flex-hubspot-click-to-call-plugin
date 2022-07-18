@@ -53,7 +53,7 @@ Next, deploy the serverless functions by running:
 twilio serverless:deploy
 ```
 
-After the deployment, copy and keep the domain URL somewhere (example: `https://flex-hubspot-click-to-call-serverless-2'(8-xxx.twil.io`)
+After the deployment, copy and keep the domain URL somewhere (example: `https://flex-hubspot-click-to-call-serverless-2348-xxx.twil.io`)
 
 Now you need to deploy the plugin, move to the root folder, and make a copy of the .env.sample file by running:
 ```bash

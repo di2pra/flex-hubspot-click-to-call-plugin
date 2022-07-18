@@ -8,7 +8,11 @@ function TableRow({ data, actionDisabled, sendSmsHandler }) {
 
   const initiateCallHandler = React.useCallback((phoneNumber) => {
     Flex.Actions.invokeAction("StartOutboundCall", {
-      destination: phoneNumber
+      destination: phoneNumber,
+      taskAttributes: {
+        name: `${data.firstname || ''} ${data.lastname || ''}`.trim(),
+        hubspot_contact_id: data.hs_object_id
+      }
     });
   }, []);
 

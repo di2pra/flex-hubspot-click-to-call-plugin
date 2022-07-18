@@ -28,8 +28,6 @@ const HubspotDataView = ({ manager }) => {
   });
   const [selectedSmsContact, setSelectedSmsContact] = useState();
 
-
-
   React.useEffect(() => {
 
     setIsLoading(true);
