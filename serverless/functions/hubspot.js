@@ -68,4 +68,4 @@ const handlerFunction = async function (context, event, callback) {
 }
 
 
-exports.handler = process.env.NODE_ENV !== 'development' ? TokenValidator(handlerFunction) : handlerFunction;
+exports.handler = TokenValidator(handlerFunction);

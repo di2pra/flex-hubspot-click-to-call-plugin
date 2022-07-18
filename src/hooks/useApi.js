@@ -21,7 +21,7 @@ const useApi = ({ token }) => {
 
   }, [token]);
 
-  const soundOutboundSms = useCallback(async ({ To, customerName, From, Body, WorkerFriendlyName, KnownAgentRoutingFlag, OpenChatFlag, WorkerSid }) => {
+  const soundOutboundSms = useCallback(async ({ To, customerName, Body, WorkerFriendlyName, KnownAgentRoutingFlag, OpenChatFlag, WorkerSid }) => {
 
     const request = await fetch(`${process.env.FLEX_APP_TWILIO_SERVERLESS_DOMAIN}/sendOutboundSms`, {
       method: "POST",
@@ -30,7 +30,6 @@ const useApi = ({ token }) => {
       },
       body: JSON.stringify({
         To,
-        From,
         Body,
         customerName,
         WorkerFriendlyName,

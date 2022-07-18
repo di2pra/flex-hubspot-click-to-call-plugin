@@ -36,7 +36,6 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }) => {
     soundOutboundSms({
       To: selectedSmsContact.hs_calculated_phone_number,
       customerName: `${selectedSmsContact.firstname || ''} ${selectedSmsContact.lastname || ''}`.trim(),
-      From: '+15076074860',
       Body: message,
       WorkerFriendlyName: manager.workerClient.name,
       KnownAgentRoutingFlag: option === SEND_SMS_OPTION_VALUES.SMS_TASK_AFTER_REPLY_ASSIGNED_TO_AGENT,

@@ -75,23 +75,6 @@ const sendOutboundMessage = async (
     attributes
   });
 
-  /*try {
-    
-
-  } catch (error) {
-
-    if (error.code === 50416)
-      return {
-        success: false,
-        errorMessage: `Error sending message. There is an open conversation already to ${To}`,
-      };
-    else
-      return {
-        success: false,
-        errorMessage: `Error sending message. Error occured adding ${To} channel`,
-      };
-  }*/
-
   // Add customer to channel
   await client.conversations
     .conversations(channel.sid)
@@ -121,7 +104,6 @@ const handlerFunction = async function (context, event, callback) {
 
   const {
     To,
-    From,
     Body,
     customerName,
     WorkerSid,
@@ -132,7 +114,7 @@ const handlerFunction = async function (context, event, callback) {
 
   const WorkerFriendlyNameUriEncoded = encodeURIComponent(WorkerFriendlyName).replace(/%/i, '_').replace(/\./i, '_2E');
 
-  console.log(`KnownAgentRoutingFlag : ${KnownAgentRoutingFlag}`)
+  const From = context.TWILIO_PHONE_NUMBER;
 
   const client = context.getTwilioClient();
 
@@ -192,4 +174,4 @@ const handlerFunction = async function (context, event, callback) {
 };
 
 
-exports.handler = process.env.NODE_ENV !== 'development' ? TokenValidator(handlerFunction) : handlerFunction;
+exports.handler = TokenValidator(handlerFunction);
