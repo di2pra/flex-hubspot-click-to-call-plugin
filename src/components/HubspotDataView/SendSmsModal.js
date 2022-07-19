@@ -107,7 +107,7 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }) => {
             <Input id="phone_number" name="phone_number" type="tel" disabled value={selectedSmsContact.hs_calculated_phone_number} required />
           </Box>
           <Label htmlFor="message" required>Message</Label>
-          <TextArea value={message || ''} disabled={isProcessing} onChange={messageChangeHandler} id="message" name="message" required />
+          <TextArea value={message || ''} disabled={isProcessing} placeholder="Write your message here..." onChange={messageChangeHandler} id="message" name="message" required />
         </ModalBody>
         <ModalFooter>
           <ModalFooterActions>

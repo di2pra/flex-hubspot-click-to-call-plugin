@@ -25,6 +25,9 @@ export default class FlexHubspotClickToCallPlugin extends FlexPlugin {
       PasteThemeProvider: CustomizationProvider
     });
 
+    // display customer name on outbound call task
+    manager.strings.TaskLineOutboundCallHeader = "{{#if task.attributes.name}} {{task.attributes.name}}{{else}} {{task.attributes.outbound_to}}{{/if}}";
+
     flex.ViewCollection.Content.add(
       <Flex.View name="customers" key="customers">
         <HubspotDataView key="HubspotDataView" manager={manager} />
