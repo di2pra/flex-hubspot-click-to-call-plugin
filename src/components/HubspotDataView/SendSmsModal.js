@@ -1,5 +1,12 @@
-import { Alert, Box, Button, Input, Label, Option, Select, Text, TextArea } from '@twilio-paste/core';
+import { Alert } from '@twilio-paste/core/Alert';
+import { Box } from '@twilio-paste/core/Box';
+import { Button } from '@twilio-paste/core/Button';
+import { Input } from '@twilio-paste/core/Input';
+import { Label } from '@twilio-paste/core/Label';
 import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading } from '@twilio-paste/core/modal';
+import { Option, Select } from '@twilio-paste/core/Select';
+import { Text } from '@twilio-paste/core/Text';
+import { TextArea } from '@twilio-paste/core/TextArea';
 import React, { useCallback, useState } from "react";
 import useApi from '../../hooks/useApi';
 import { SEND_SMS_OPTION_VALUES, SEND_SMS_OPTION_VALUES_LABEL } from './constants';

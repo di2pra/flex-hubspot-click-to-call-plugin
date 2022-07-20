@@ -1,4 +1,7 @@
-import { Box, Button, HelpText, Td, Tr } from '@twilio-paste/core';
+import { Box } from '@twilio-paste/core/Box';
+import { Button } from '@twilio-paste/core/Button';
+import { HelpText } from '@twilio-paste/core/Help-Text';
+import { Td, Tr } from '@twilio-paste/core/table';
 import { SMSCapableIcon } from "@twilio-paste/icons/esm/SMSCapableIcon";
 import { VoiceCapableIcon } from "@twilio-paste/icons/esm/VoiceCapableIcon";
 import * as Flex from "@twilio/flex-ui";

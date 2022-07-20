@@ -1,4 +1,6 @@
-import { Box, Input, Option, Select } from '@twilio-paste/core';
+import { Box } from '@twilio-paste/core/Box';
+import { Input } from '@twilio-paste/core/Input';
+import { Option, Select } from '@twilio-paste/core/Select';
 import React from 'react';
 import { PAGE_SIZE_OPTIONS } from './constants';
 
