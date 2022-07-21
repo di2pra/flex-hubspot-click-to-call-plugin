@@ -37,19 +37,4 @@ export default class FlexHubspotClickToCallPlugin extends FlexPlugin {
       <SideNavButton key="side-nav-button-key" />
     );
   }
-
-  /**
-   * Registers the plugin reducers
-   *
-   * @param manager { Flex.Manager }
-   */
-  /*registerReducers(manager) {
-    if (!manager.store.addReducer) {
-      // eslint-disable-next-line
-      console.error(`You need FlexUI > 1.9.0 to use built-in redux; you are currently on ${VERSION}`);
-      return;
-    }
-
-    manager.store.addReducer(namespace, reducers);
-  }*/
 }
