@@ -36,16 +36,16 @@ cd serverless
 cp .env.sample .env
 ```
 
-Update the .env with your values :
+Update the .env (located in the serverless folder) with your values :
 ```bash
-ACCOUNT_SID=
-AUTH_TOKEN=
-HUBSPOT_API_KEY=
-INBOUND_SMS_STUDIO_FLOW=
-TASK_ROUTER_WORKSPACE_SID=
-TASK_ROUTER_WORKFLOW_SID=
-TASK_ROUTER_QUEUE_SID=
-TWILIO_PHONE_NUMBER=
+ACCOUNT_SID=<Your Value>
+AUTH_TOKEN=<Your Value>
+HUBSPOT_API_KEY=<Your Value>
+INBOUND_SMS_STUDIO_FLOW=<Your Value>
+TASK_ROUTER_WORKSPACE_SID=<Your Value>
+TASK_ROUTER_WORKFLOW_SID=<Your Value>
+TASK_ROUTER_QUEUE_SID=<Your Value>
+TWILIO_PHONE_NUMBER=<Your Value>
 ```
 
 Next, deploy the serverless functions by running:
@@ -62,7 +62,7 @@ cp .env.sample .env
 
 Update the .env with your values :
 ```bash
-FLEX_APP_TWILIO_SERVERLESS_DOMAIN=
+FLEX_APP_TWILIO_SERVERLESS_DOMAIN=<Your Value>
 ```
 
 Next, deploy the flex plugin by running:
@@ -77,4 +77,41 @@ twilio flex:plugins:release --plugin flex-hubspot-click-to-call-plugin@1.0.0 --n
 
 ## Development
 
-Run `twilio flex:plugins --help` to see all the commands we currently support. For further details on Flex Plugins refer to our documentation on the [Twilio Docs](https://www.twilio.com/docs/flex/developer/plugins/cli) page.
+First Move to the serverless folder and make a copy of the file .env.sample by running:
+```bash
+cd serverless
+cp .env.sample .env
+```
+
+Update the .env (located in the serverless folder) with your values :
+```bash
+ACCOUNT_SID=<Your Value>
+AUTH_TOKEN=<Your Value>
+HUBSPOT_API_KEY=<Your Value>
+INBOUND_SMS_STUDIO_FLOW=<Your Value>
+TASK_ROUTER_WORKSPACE_SID=<Your Value>
+TASK_ROUTER_WORKFLOW_SID=<Your Value>
+TASK_ROUTER_QUEUE_SID=<Your Value>
+TWILIO_PHONE_NUMBER=<Your Value>
+```
+
+Next, start the twilio serverless on your local machine by running:
+```bash
+npm start
+```
+
+Now you need to start the Flex plugin, move to the root folder, and make a copy of the .env.sample file by running:
+```bash
+cd ../
+cp .env.sample .env
+```
+
+Next update the .env (located in the root folder) file with your local serverless instance hostname:
+```
+FLEX_APP_TWILIO_SERVERLESS_DOMAIN=<Your Value>
+```
+
+Finally start the local flex plugin instance from the root folder by running:
+```bash
+twilio flex:plugins:start
+```
