@@ -1,14 +1,14 @@
-import { Alert, Box, Text } from '@twilio-paste/core';
-import {
-  Pagination, PaginationArrow, PaginationItems, PaginationLabel
-} from '@twilio-paste/core/pagination';
+import { Box } from '@twilio-paste/core/box';
+import { Stack } from '@twilio-paste/core/stack';
 import { DynamicContentStore } from "@twilio/flex-ui";
 import React, { useState } from "react";
 import useApi from '../../hooks/useApi';
 import { PAGE_SIZE_OPTIONS } from './constants';
 import SendSmsModal from './SendSmsModal';
 import TableComponent from './TableComponent';
+import TableErrorBox from './TableErrorBox';
 import TableMenu from './TableMenu';
+import TablePagination from './TablePagination';
 
 
 export const displayName = "HubspotDataView";
@@ -56,40 +56,14 @@ const HubspotDataView = ({ manager }) => {
   return (
     <>
       <SendSmsModal selectedSmsContact={selectedSmsContact} manager={manager} handleClose={handleCloseModel} />
-      <Box padding="space70">
-        {
-          error ? (
-            <Box marginBottom="space60">
-              <Alert variant='error'>
-                <Text>{error}</Text>
-              </Alert>
-            </Box>
-          ) : null
-        }
-        <TableMenu dataState={dataState} setDataState={setDataState} />
-        <TableComponent isLoading={isLoading} data={data} manager={manager} sendSmsHandler={sendSmsHandler} />
-        <Box display="flex" justifyContent="center" marginTop="space50">
-          {
-            isLoading ? null : (
-              ((data && data.results) || []).length === 0 ? (
-                <Pagination label="anchor pagination navigation">
-                  <PaginationItems>
-                    <PaginationLabel>0-0 of 0 contact</PaginationLabel>
-                  </PaginationItems>
-                </Pagination>
-              ) : (
-                <Pagination label="anchor pagination navigation">
-                  <PaginationItems>
-                    <PaginationArrow onClick={(e) => { e.preventDefault(); onPaginateHandler(dataState.after - dataState.limit); }} disabled={dataState.after === 0} as="button" label="Go to previous page" variant="back" />
-                    <PaginationLabel>{dataState.after + 1}–{(dataState.after + dataState.limit > data.total) ? (data.total) : (dataState.after + dataState.limit)} of {data.total} contacts</PaginationLabel>
-                    <PaginationArrow onClick={(e) => { e.preventDefault(); onPaginateHandler(dataState.after + dataState.limit); }} disabled={data && data.total <= (dataState.after + dataState.limit)} as="button" label="Go to next page" variant="forward" />
-                  </PaginationItems>
-                </Pagination>
-              )
-            )
-          }
-        </Box>
-      </Box >
+      <Box padding="space70" >
+        <Stack orientation="vertical" spacing="space50">
+          <TableErrorBox error={error} />
+          <TableMenu dataState={dataState} setDataState={setDataState} />
+          <TableComponent isLoading={isLoading} data={data} manager={manager} sendSmsHandler={sendSmsHandler} />
+          <TablePagination isLoading={isLoading} data={data} dataState={dataState} />
+        </Stack>
+      </Box>
     </>
   );
 

@@ -21,10 +21,8 @@ function TableMenu({ dataState, setDataState }) {
   }, [setDataState]);
 
   return (
-    <Box display="flex" justifyContent="space-between" marginBottom="space40">
-      <Box
-        width="size40"
-      >
+    <Box display="flex" justifyContent="space-between">
+      <Box width="size40">
         <Input
           aria-label="Search"
           type="text"
