@@ -2,9 +2,16 @@ import { Box } from '@twilio-paste/core/Box';
 import {
   Pagination, PaginationArrow, PaginationItems, PaginationLabel
 } from '@twilio-paste/core/pagination';
-import React from 'react';
+import { ITableDataState } from '../../Types';
 
-function TablePagination({ isLoading, data, dataState }) {
+type Props = {
+  isLoading: boolean;
+  data: any;
+  dataState: ITableDataState;
+  onPaginateHandler: (newAfter: number) => void;
+}
+
+function TablePagination({ isLoading, data, dataState, onPaginateHandler }: Props) {
 
   if (isLoading || data === undefined) {
     return null

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-const useApi = ({ token }) => {
+const useApi = ({ token }: { token: string }) => {
 
   const getData = useCallback(async ({ limit, after, query }) => {
 

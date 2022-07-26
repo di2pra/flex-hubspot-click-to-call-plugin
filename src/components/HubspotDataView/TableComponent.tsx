@@ -2,12 +2,19 @@ import { Box } from '@twilio-paste/core/box';
 import { Spinner } from '@twilio-paste/core/spinner';
 import { Table, TBody, Td, Th, THead, Tr } from '@twilio-paste/core/table';
 import * as Flex from "@twilio/flex-ui";
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import TableRow from './TableRow';
 
-function TableComponent({ isLoading, data, manager, sendSmsHandler }) {
+type Props = {
+  isLoading: boolean;
+  data: any;
+  manager: Flex.Manager;
+  sendSmsHandler: (data: any) => void;
+}
 
-  const [actionDisabled, setActionDisabled] = useState(!manager.workerClient.activity.available);
+function TableComponent({ isLoading, data, manager, sendSmsHandler }: Props) {
+
+  const [actionDisabled, setActionDisabled] = useState(manager.workerClient ? !manager.workerClient.activity.available : true);
 
   const afterSetActivityListener = useCallback((payload) => {
     if (payload.activityAvailable) {
@@ -49,8 +56,8 @@ function TableComponent({ isLoading, data, manager, sendSmsHandler }) {
               </Tr>
             ) : (
               data ? (
-                (data.results || []).map((item, key) => {
-                  return (<TableRow key={key} data={item.properties} manager={manager} actionDisabled={actionDisabled || !item.properties.hs_calculated_phone_number} sendSmsHandler={sendSmsHandler} />)
+                (data.results || []).map((item: any, key: number) => {
+                  return (<TableRow key={key} data={item.properties} actionDisabled={actionDisabled || !item.properties.hs_calculated_phone_number} sendSmsHandler={sendSmsHandler} />)
                 })
               ) : (
                 <Tr>

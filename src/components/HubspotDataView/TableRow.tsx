@@ -7,7 +7,13 @@ import { VoiceCapableIcon } from "@twilio-paste/icons/esm/VoiceCapableIcon";
 import * as Flex from "@twilio/flex-ui";
 import React from 'react';
 
-function TableRow({ data, actionDisabled, sendSmsHandler }) {
+type Props = {
+  data: any;
+  actionDisabled: boolean;
+  sendSmsHandler: (data: any) => void;
+}
+
+function TableRow({ data, actionDisabled, sendSmsHandler }: Props) {
 
   const initiateCallHandler = React.useCallback((phoneNumber) => {
     Flex.Actions.invokeAction("StartOutboundCall", {
@@ -27,8 +33,8 @@ function TableRow({ data, actionDisabled, sendSmsHandler }) {
       <Td>{data.hs_calculated_phone_number ? data.hs_calculated_phone_number : <HelpText>N/A</HelpText>}</Td>
       <Td>
         <Box display="flex" columnGap="space40">
-          <Button disabled={actionDisabled} type="button" onClick={() => initiateCallHandler(data.hs_calculated_phone_number)}><VoiceCapableIcon decorative={false} title="Call the customer" /></Button>
-          <Button disabled={actionDisabled} onClick={() => { sendSmsHandler(data) }}><SMSCapableIcon decorative={false} title="Send a Message to customer" /></Button>
+          <Button variant='primary' disabled={actionDisabled} type="button" onClick={() => initiateCallHandler(data.hs_calculated_phone_number)}><VoiceCapableIcon decorative={false} title="Call the customer" /></Button>
+          <Button variant='primary' disabled={actionDisabled} onClick={() => { sendSmsHandler(data) }}><SMSCapableIcon decorative={false} title="Send a Message to customer" /></Button>
         </Box>
       </Td>
     </Tr>
