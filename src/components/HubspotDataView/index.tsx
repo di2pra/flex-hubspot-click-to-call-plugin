@@ -4,7 +4,7 @@ import * as Flex from "@twilio/flex-ui";
 import { DynamicContentStore } from "@twilio/flex-ui";
 import React, { useState } from "react";
 import useApi from '../../hooks/useApi';
-import { ITableDataState } from '../../Types';
+import { ICustomer, IHubspotResponse, ITableDataState } from '../../Types';
 import { PAGE_SIZE_OPTIONS } from './constants';
 import SendSmsModal from './SendSmsModal';
 import TableComponent from './TableComponent';
@@ -21,13 +21,13 @@ const HubspotDataView = ({ manager }: { manager: Flex.Manager }) => {
 
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [data, setData] = useState();
+  const [data, setData] = useState<IHubspotResponse>();
   const [dataState, setDataState] = useState<ITableDataState>({
     limit: PAGE_SIZE_OPTIONS[0],
     after: 0,
     query: ''
   });
-  const [selectedSmsContact, setSelectedSmsContact] = useState();
+  const [selectedSmsContact, setSelectedSmsContact] = useState<ICustomer>();
 
   React.useEffect(() => {
 
@@ -42,7 +42,7 @@ const HubspotDataView = ({ manager }: { manager: Flex.Manager }) => {
 
   }, [getData, dataState]);
 
-  const sendSmsHandler = React.useCallback((data) => {
+  const sendSmsHandler = React.useCallback((data: ICustomer) => {
     setSelectedSmsContact(data);
   }, []);
 
