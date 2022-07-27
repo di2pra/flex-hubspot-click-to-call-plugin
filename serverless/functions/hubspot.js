@@ -37,6 +37,10 @@ const handlerFunction = async function (context, event, callback) {
       })
     });
 
+    if (!request.ok) {
+      throw new Error('Error while retrieving data from hubspot');
+    }
+
     const data = await request.json();
 
     const response = new Twilio.Response();

@@ -1,8 +1,10 @@
 import { Box } from '@twilio-paste/core/box';
 import { Stack } from '@twilio-paste/core/stack';
+import * as Flex from "@twilio/flex-ui";
 import { DynamicContentStore } from "@twilio/flex-ui";
 import React, { useState } from "react";
 import useApi from '../../hooks/useApi';
+import { ICustomer, IHubspotResponse, ITableDataState } from '../../Types';
 import { PAGE_SIZE_OPTIONS } from './constants';
 import SendSmsModal from './SendSmsModal';
 import TableComponent from './TableComponent';
@@ -10,28 +12,28 @@ import TableErrorBox from './TableErrorBox';
 import TableMenu from './TableMenu';
 import TablePagination from './TablePagination';
 
-
 export const displayName = "HubspotDataView";
 export const contentStore = new DynamicContentStore(displayName);
 
-const HubspotDataView = ({ manager }) => {
+const HubspotDataView = ({ manager }: { manager: Flex.Manager }) => {
 
   const { getData } = useApi({ token: manager.store.getState().flex.session.ssoTokenPayload.token });
 
-  const [error, setError] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState();
-  const [dataState, setDataState] = useState({
+  const [error, setError] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [data, setData] = useState<IHubspotResponse>();
+  const [dataState, setDataState] = useState<ITableDataState>({
     limit: PAGE_SIZE_OPTIONS[0],
     after: 0,
     query: ''
   });
-  const [selectedSmsContact, setSelectedSmsContact] = useState();
+  const [selectedSmsContact, setSelectedSmsContact] = useState<ICustomer>();
 
   React.useEffect(() => {
 
     setIsLoading(true);
     setData(undefined);
+    setError(undefined);
 
     getData(dataState)
       .then(data => setData(data))
@@ -40,7 +42,7 @@ const HubspotDataView = ({ manager }) => {
 
   }, [getData, dataState]);
 
-  const sendSmsHandler = React.useCallback((data) => {
+  const sendSmsHandler = React.useCallback((data: ICustomer) => {
     setSelectedSmsContact(data);
   }, []);
 
@@ -61,7 +63,7 @@ const HubspotDataView = ({ manager }) => {
           <TableErrorBox error={error} />
           <TableMenu dataState={dataState} setDataState={setDataState} />
           <TableComponent isLoading={isLoading} data={data} manager={manager} sendSmsHandler={sendSmsHandler} />
-          <TablePagination isLoading={isLoading} data={data} dataState={dataState} />
+          <TablePagination isLoading={isLoading} data={data} dataState={dataState} onPaginateHandler={onPaginateHandler} />
         </Stack>
       </Box>
     </>

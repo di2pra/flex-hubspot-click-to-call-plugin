@@ -1,8 +1,8 @@
 import { CustomizationProvider } from "@twilio-paste/core/customization";
 import { FlexPlugin } from '@twilio/flex-plugin';
 import * as Flex from "@twilio/flex-ui";
-import HubspotDataView from "./components/HubspotDataView/index.js";
-import SideNavButton from "./components/SideNavButton.js";
+import HubspotDataView from "./components/HubspotDataView";
+import SideNavButton from "./components/SideNavButton";
 
 const PLUGIN_NAME = 'FlexHubspotClickToCallPlugin';
 
@@ -18,7 +18,7 @@ export default class FlexHubspotClickToCallPlugin extends FlexPlugin {
    * @param flex { typeof import('@twilio/flex-ui') }
    * @param manager { import('@twilio/flex-ui').Manager }
    */
-  async init(flex, manager) {
+  async init(flex: typeof Flex, manager: Flex.Manager): Promise<void> {
 
 
     flex.setProviders({
@@ -33,6 +33,7 @@ export default class FlexHubspotClickToCallPlugin extends FlexPlugin {
         <HubspotDataView key="HubspotDataView" manager={manager} />
       </Flex.View>
     );
+
     flex.SideNav.Content.add(
       <SideNavButton key="side-nav-button-key" />
     );

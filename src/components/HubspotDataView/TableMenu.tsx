@@ -2,9 +2,15 @@ import { Box } from '@twilio-paste/core/Box';
 import { Input } from '@twilio-paste/core/Input';
 import { Option, Select } from '@twilio-paste/core/Select';
 import React from 'react';
+import { ITableDataState } from '../../Types';
 import { PAGE_SIZE_OPTIONS } from './constants';
 
-function TableMenu({ dataState, setDataState }) {
+type Props = {
+  dataState: ITableDataState;
+  setDataState: React.Dispatch<React.SetStateAction<ITableDataState>>
+}
+
+function TableMenu({ dataState, setDataState }: Props) {
 
   const onQueryChangeHandler = React.useCallback((event) => {
 
@@ -32,10 +38,10 @@ function TableMenu({ dataState, setDataState }) {
         />
       </Box>
       <Box>
-        <Select id="items_per_page" value={dataState.limit} onChange={onItemPerPageChangeHandler}>
+        <Select id="items_per_page" value={dataState.limit.toString()} onChange={onItemPerPageChangeHandler}>
           {
             PAGE_SIZE_OPTIONS.map((item, index) => {
-              return (<Option key={index} value={item}>{item}</Option>)
+              return (<Option key={index} value={item.toString()}>{item}</Option>)
             })
           }
         </Select>

@@ -1,7 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
-import React from "react";
 
-const SideNavButton = ({ activeView }) => {
+type Props = {
+  activeView?: string
+}
+
+const SideNavButton = ({ activeView }: Props): JSX.Element | null => {
 
   return (
     <Flex.SideLink
@@ -16,5 +19,7 @@ const SideNavButton = ({ activeView }) => {
     </Flex.SideLink>
   );
 }
+
+SideNavButton.displayName = 'SideNavButton';
 
 export default SideNavButton;

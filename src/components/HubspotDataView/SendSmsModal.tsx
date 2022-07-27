@@ -7,27 +7,34 @@ import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHe
 import { Option, Select } from '@twilio-paste/core/Select';
 import { Text } from '@twilio-paste/core/Text';
 import { TextArea } from '@twilio-paste/core/TextArea';
-import React, { useCallback, useState } from "react";
+import * as Flex from "@twilio/flex-ui";
+import { useCallback, useState } from "react";
 import useApi from '../../hooks/useApi';
-import { SEND_SMS_OPTION_VALUES, SEND_SMS_OPTION_VALUES_LABEL } from './constants';
+import { SEND_SMS_OPTION } from './constants';
 
 const MODAL_ID = "smsOutboundModal";
 
-const SendSmsModal = ({ selectedSmsContact, handleClose, manager }) => {
+type Props = {
+  selectedSmsContact: any,
+  handleClose: () => void,
+  manager: Flex.Manager
+}
+
+const SendSmsModal = ({ selectedSmsContact, handleClose, manager }: Props) => {
 
   const { soundOutboundSms } = useApi({ token: manager.store.getState().flex.session.ssoTokenPayload.token });
-  const [option, setOption] = useState(Object.entries(SEND_SMS_OPTION_VALUES)[0]);
-  const [message, setMessage] = useState();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [messageSent, setMessageSent] = useState(false);
-  const [error, setError] = useState();
+  const [option, setOption] = useState(SEND_SMS_OPTION[0].value);
+  const [message, setMessage] = useState<string>();
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [messageSent, setMessageSent] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
 
   const messageChangeHandler = useCallback((event) => {
     setMessage(event.target.value);
   }, []);
 
   const closeModal = useCallback(() => {
-    setOption(Object.entries(SEND_SMS_OPTION_VALUES)[0]);
+    setOption(SEND_SMS_OPTION[0].value);
     setMessage(undefined);
     setError(undefined);
     setIsProcessing(false);
@@ -44,10 +51,10 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }) => {
       To: selectedSmsContact.hs_calculated_phone_number,
       customerName: `${selectedSmsContact.firstname || ''} ${selectedSmsContact.lastname || ''}`.trim(),
       Body: message,
-      WorkerFriendlyName: manager.workerClient.name,
-      KnownAgentRoutingFlag: option === SEND_SMS_OPTION_VALUES.SMS_TASK_AFTER_REPLY_ASSIGNED_TO_AGENT,
-      OpenChatFlag: option === SEND_SMS_OPTION_VALUES.TASK_AND_SMS,
-      WorkerSid: manager.workerClient.sid
+      WorkerFriendlyName: manager.workerClient ? manager.workerClient.name : '',
+      KnownAgentRoutingFlag: option === SEND_SMS_OPTION[0].value,
+      OpenChatFlag: option === SEND_SMS_OPTION[2].value,
+      WorkerSid: manager.workerClient ? manager.workerClient.sid : null
     })
       .then(() => setMessageSent(true))
       .catch(() => setError("Error while sending the SMS"))
@@ -72,7 +79,7 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }) => {
         <Box as="form" onSubmit={onSubmitHandler}>
           <ModalBody>
             <Alert variant='neutral'>
-              <Text>Message successfully sent to {selectedSmsContact.firstname} {selectedSmsContact.lastname}.</Text>
+              <Text as="p">Message successfully sent to {selectedSmsContact.firstname} {selectedSmsContact.lastname}.</Text>
             </Alert>
           </ModalBody>
           <ModalFooter>
@@ -96,7 +103,7 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }) => {
             error ? (
               <Box marginBottom="space60">
                 <Alert variant='error'>
-                  <Text>{error}</Text>
+                  <Text as="p">{error}</Text>
                 </Alert>
               </Box>
             ) : null
@@ -104,8 +111,8 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }) => {
           <Box marginBottom="space60">
             <Label htmlFor="outbound_option">Option</Label>
             <Select id="outbound_option" value={option} onChange={onOptionChangeHandler}>
-              {Object.entries(SEND_SMS_OPTION_VALUES).map(([key, value], index) => {
-                return (<Option key={index} value={key}>{SEND_SMS_OPTION_VALUES_LABEL[value]}</Option>)
+              {SEND_SMS_OPTION.map((item, index) => {
+                return (<Option key={index} value={item.value}>{item.label}</Option>)
               })}
             </Select>
           </Box>
