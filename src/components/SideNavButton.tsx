@@ -14,9 +14,7 @@ const SideNavButton = ({ activeView }: Props): JSX.Element | null => {
       isActive={activeView === "customers"}
       onClick={() => { Flex.Actions.invokeAction("HistoryPush", `/customers`); }}
       key="MyCustomPageSideLink"
-    >
-      My custom page
-    </Flex.SideLink>
+    >Customers</Flex.SideLink>
   );
 }
 

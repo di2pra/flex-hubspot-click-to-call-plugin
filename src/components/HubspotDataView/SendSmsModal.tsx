@@ -51,6 +51,7 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }: Props) => {
       To: selectedSmsContact.hs_calculated_phone_number,
       customerName: `${selectedSmsContact.firstname || ''} ${selectedSmsContact.lastname || ''}`.trim(),
       Body: message,
+      WorkerConversationIdentity: manager.conversationsClient ? manager.conversationsClient.user.identity : '',
       WorkerFriendlyName: manager.workerClient ? manager.workerClient.name : '',
       KnownAgentRoutingFlag: option === SEND_SMS_OPTION[0].value,
       OpenChatFlag: option === SEND_SMS_OPTION[2].value,
