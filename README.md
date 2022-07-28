@@ -50,7 +50,7 @@ TWILIO_PHONE_NUMBER=<Your Value>
 
 Next, deploy the serverless functions by running:
 ```bash
-twilio serverless:deploy
+npm run deploy
 ```
 
 After the deployment, copy and keep the domain URL somewhere (example: `https://flex-hubspot-click-to-call-serverless-2348-xxx.twil.io`)
