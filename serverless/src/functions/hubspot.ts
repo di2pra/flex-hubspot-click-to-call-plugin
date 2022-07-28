@@ -1,7 +1,23 @@
-const TokenValidator = require("twilio-flex-token-validator").functionValidator;
+import '@twilio-labs/serverless-runtime-types';
+import { Context, ServerlessCallback, ServerlessFunctionSignature } from '@twilio-labs/serverless-runtime-types/types';
+import { functionValidator as TokenValidator } from 'twilio-flex-token-validator';
 const fetch = require('node-fetch');
 
-const handlerFunction = async function (context, event, callback) {
+type MyEvent = {
+  limit: string;
+  after: string;
+  query: string
+}
+
+type MyContext = {
+}
+
+// @ts-ignore
+export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = TokenValidator(async function (
+  context: Context<MyContext>,
+  event: MyEvent,
+  callback: ServerlessCallback
+) {
 
   const {
     limit,
@@ -41,7 +57,7 @@ const handlerFunction = async function (context, event, callback) {
       throw new Error('Error while retrieving data from hubspot');
     }
 
-    const data = await request.json();
+    const data = await request.json() as object;
 
     const response = new Twilio.Response();
     response.appendHeader("Access-Control-Allow-Origin", "*");
@@ -56,20 +72,25 @@ const handlerFunction = async function (context, event, callback) {
 
   } catch (err) {
 
-    const response = new Twilio.Response();
-    response.appendHeader("Access-Control-Allow-Origin", "*");
-    response.appendHeader("Access-Control-Allow-Methods", "OPTIONS POST GET");
-    response.appendHeader("Access-Control-Allow-Headers", "Content-Type");
+    if (err instanceof Error) {
+      const response = new Twilio.Response();
+      response.appendHeader("Access-Control-Allow-Origin", "*");
+      response.appendHeader("Access-Control-Allow-Methods", "OPTIONS POST GET");
+      response.appendHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    response.appendHeader("Content-Type", "plain/text");
-    response.setBody(err.message);
-    response.setStatusCode(500);
-    // If there's an error, send an error response
-    // Keep using the response object for CORS purposes
-    console.error(err);
-    callback(null, response);
+      response.appendHeader("Content-Type", "plain/text");
+      response.setBody(err.message);
+      response.setStatusCode(500);
+      // If there's an error, send an error response
+      // Keep using the response object for CORS purposes
+      console.error(err);
+      callback(null, response);
+    } else {
+      callback(null, {});
+    }
+
   }
-}
+})
 
-
-exports.handler = TokenValidator(handlerFunction);
+// @ts-ignore
+//export const handler = TokenValidator(handlerFunction);
