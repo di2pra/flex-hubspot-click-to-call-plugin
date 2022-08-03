@@ -1,7 +1,7 @@
 import '@twilio-labs/serverless-runtime-types';
 import { Context, ServerlessCallback } from '@twilio-labs/serverless-runtime-types/types';
 import { Twilio as TwilioClient } from 'twilio';
-import { functionValidator as TokenValidator } from 'twilio-flex-token-validator';
+import { functionValidator as FunctionTokenValidator, validator as TokenValidator } from 'twilio-flex-token-validator';
 
 const openAChatTask: (client: TwilioClient,
   To: string,
@@ -53,7 +53,7 @@ const openAChatTask: (client: TwilioClient,
 
     const taskAttributes = JSON.parse(interaction.routing.properties.attributes);
 
-    const message = await client.conversations
+    await client.conversations
       .conversations(taskAttributes.conversationSid)
       .messages.create({ author: WorkerConversationIdentity, body: Body });
 
@@ -130,14 +130,15 @@ type MyEvent = {
   To: string;
   Body: string;
   customerName: string;
-  WorkerSid: string;
-  WorkerConversationIdentity: string;
   WorkerFriendlyName: string;
   OpenChatFlag: string;
   KnownAgentRoutingFlag: boolean;
+  Token: string;
 }
 
 type MyContext = {
+  ACCOUNT_SID: string;
+  AUTH_TOKEN: string;
   TWILIO_PHONE_NUMBER: string;
   TASK_ROUTER_WORKSPACE_SID: string;
   TASK_ROUTER_WORKFLOW_SID: string;
@@ -146,7 +147,7 @@ type MyContext = {
 }
 
 // @ts-ignore
-export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = TokenValidator(async function (
+export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = FunctionTokenValidator(async function (
   context: Context<MyContext>,
   event: MyEvent,
   callback: ServerlessCallback
@@ -156,15 +157,13 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = TokenVal
     To,
     Body,
     customerName,
-    WorkerSid,
     WorkerFriendlyName,
-    WorkerConversationIdentity
+    Token
   } = event;
 
   let { OpenChatFlag, KnownAgentRoutingFlag } = event;
 
   const From = context.TWILIO_PHONE_NUMBER;
-
   const client = context.getTwilioClient();
 
   // Create a custom Twilio Response
@@ -177,6 +176,17 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = TokenVal
   try {
     let sendResponse = null;
 
+    const tokenInformation = await TokenValidator(Token, context.ACCOUNT_SID || '', context.AUTH_TOKEN || '') as {
+      identity: string;
+      roles: string[];
+      worker_sid: string;
+    };
+
+    const {
+      worker_sid,
+      identity
+    } = tokenInformation;
+
     if (OpenChatFlag) {
       // create task and add the message to a channel
       sendResponse = await openAChatTask(
@@ -185,12 +195,12 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = TokenVal
         customerName,
         From,
         Body,
-        WorkerConversationIdentity,
+        identity,
         {
           workspace_sid: context.TASK_ROUTER_WORKSPACE_SID,
           workflow_sid: context.TASK_ROUTER_WORKFLOW_SID,
           queue_sid: context.TASK_ROUTER_QUEUE_SID,
-          worker_sid: WorkerSid,
+          worker_sid: worker_sid
         }
       );
     } else {
@@ -202,7 +212,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = TokenVal
         Body,
         KnownAgentRoutingFlag,
         WorkerFriendlyName,
-        WorkerConversationIdentity,
+        identity,
         context.INBOUND_SMS_STUDIO_FLOW
       );
 

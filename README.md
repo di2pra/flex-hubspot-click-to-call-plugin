@@ -30,7 +30,7 @@ twilio plugins:install @twilio-labs/plugin-serverless
 
 First, you need to deploy the Twilio Serverless functions.
 
-Move to the serverless folder and make a copy of the file .env.sample by running:
+Move to the serverless folder and make a copy of the file **.env.sample** by running:
 ```bash
 cd serverless
 cp .env.sample .env
@@ -55,12 +55,12 @@ npm run deploy
 
 After the deployment, copy and keep the domain URL somewhere (example: `https://flex-hubspot-click-to-call-serverless-2348-xxx.twil.io`)
 
-Now you need to deploy the plugin, move to the root folder, and make a copy of the .env.sample file by running:
+Now you need to deploy the plugin, move to the root folder, and make a copy of the **.env.sample** file by running:
 ```bash
 cp .env.sample .env
 ```
 
-Update the .env with your values :
+Update the **.env** with your values :
 ```bash
 FLEX_APP_TWILIO_SERVERLESS_DOMAIN=<Your Value>
 ```
@@ -77,7 +77,7 @@ twilio flex:plugins:release --plugin flex-hubspot-click-to-call-plugin@1.0.0 --n
 
 ## Development
 
-First Move to the serverless folder and make a copy of the file .env.sample by running:
+First Move to the serverless folder and make a copy of the file **.env.sample** by running:
 ```bash
 cd serverless
 cp .env.sample .env
@@ -100,13 +100,13 @@ Next, start the twilio serverless on your local machine by running:
 npm start
 ```
 
-Now you need to start the Flex plugin, move to the root folder, and make a copy of the .env.sample file by running:
+Now you need to start the Flex plugin, move to the root folder, and make a copy of the **.env.sample** file by running:
 ```bash
 cd ../
 cp .env.sample .env
 ```
 
-Next update the .env (located in the root folder) file with your local serverless instance hostname:
+Next update the **.env** (located in the root folder) file with your local serverless instance hostname:
 ```
 FLEX_APP_TWILIO_SERVERLESS_DOMAIN=<Your Value>
 ```
