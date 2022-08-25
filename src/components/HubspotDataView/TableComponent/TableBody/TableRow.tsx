@@ -10,10 +10,11 @@ type Props = {
   data: ICustomer;
   actionDisabled: boolean;
   sendSmsHandler: (data: ICustomer) => void;
+  sendWAHandler: (data: ICustomer) => void;
   initiateCallHandler: (data: ICustomer) => void;
 }
 
-function TableRow({ data, actionDisabled, sendSmsHandler, initiateCallHandler }: Props) {
+function TableRow({ data, actionDisabled, sendSmsHandler, sendWAHandler, initiateCallHandler }: Props) {
 
   return (
     <DataGridRow>
@@ -25,6 +26,7 @@ function TableRow({ data, actionDisabled, sendSmsHandler, initiateCallHandler }:
         <Box display="flex" columnGap="space40">
           <Button variant='primary' disabled={actionDisabled} type="button" onClick={() => initiateCallHandler(data)}><VoiceCapableIcon decorative={false} title="Call the customer" /></Button>
           <Button variant='primary' disabled={actionDisabled} onClick={() => { sendSmsHandler(data) }}><SMSCapableIcon decorative={false} title="Send a Message to customer" /></Button>
+          <Button variant='primary' disabled={actionDisabled} onClick={() => { sendWAHandler(data) }}><SMSCapableIcon decorative={false} title="Send a Whatsapp Message to customer" /></Button>
         </Box>
       </DataGridCell>
     </DataGridRow>

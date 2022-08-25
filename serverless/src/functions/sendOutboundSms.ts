@@ -9,6 +9,7 @@ const openAChatTask: (client: TwilioClient,
   From: string,
   Body: string,
   WorkerConversationIdentity: string,
+  channel: string,
   routingProperties: object) => Promise<{
     success: boolean;
     interactionSid: string;
@@ -20,12 +21,13 @@ const openAChatTask: (client: TwilioClient,
     From,
     Body,
     WorkerConversationIdentity,
+    channel,
     routingProperties
   ) => {
 
     const interaction = await client.flexApi.v1.interaction.create({
       channel: {
-        type: "sms",
+        type: channel,
         initiated_by: "agent",
         participants: [
           {
@@ -37,7 +39,7 @@ const openAChatTask: (client: TwilioClient,
       routing: {
         properties: {
           ...routingProperties,
-          task_channel_unique_name: "sms",
+          task_channel_unique_name: channel === 'whatsapp' ? 'chat' : channel,
           attributes: {
             name: customerName,
             from: To,
@@ -45,7 +47,7 @@ const openAChatTask: (client: TwilioClient,
             customerName: customerName,
             customerAddress: To,
             twilioNumber: From,
-            channelType: "sms"
+            channelType: channel
           },
         },
       }
@@ -163,8 +165,12 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = Function
 
   let { OpenChatFlag, KnownAgentRoutingFlag } = event;
 
-  const From = context.TWILIO_PHONE_NUMBER;
+  const channel = To.includes('whatsapp') ? 'whatsapp' : 'sms';
+  const From = channel === 'whatsapp' ? 'whatsapp:+19362463025' : context.TWILIO_PHONE_NUMBER;
   const client = context.getTwilioClient();
+
+  console.log(`To : ${To}`);
+  console.log(`From : ${From}`);
 
   // Create a custom Twilio Response
   // Set the CORS headers to allow Flex to make an HTTP request to the Twilio Function
@@ -196,6 +202,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = Function
         From,
         Body,
         identity,
+        channel,
         {
           workspace_sid: context.TASK_ROUTER_WORKSPACE_SID,
           workflow_sid: context.TASK_ROUTER_WORKFLOW_SID,

@@ -10,17 +10,18 @@ import { TextArea } from '@twilio-paste/core/TextArea';
 import * as Flex from "@twilio/flex-ui";
 import { useCallback, useState } from "react";
 import useApi from '../../hooks/useApi';
+import { ICustomer } from '../../Types';
 import { SEND_SMS_OPTION } from './constants';
 
 const MODAL_ID = "smsOutboundModal";
 
 type Props = {
-  selectedSmsContact: any,
+  selectedContact?: ICustomer,
   handleClose: () => void,
   manager: Flex.Manager
 }
 
-const SendSmsModal = ({ selectedSmsContact, handleClose, manager }: Props) => {
+const SendSmsModal = ({ selectedContact, handleClose, manager }: Props) => {
 
   const { soundOutboundSms } = useApi({ token: manager.store.getState().flex.session.ssoTokenPayload.token });
   const [option, setOption] = useState(SEND_SMS_OPTION[0].value);
@@ -47,25 +48,29 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }: Props) => {
 
     setIsProcessing(true);
 
-    soundOutboundSms({
-      To: selectedSmsContact.hs_calculated_phone_number,
-      customerName: `${selectedSmsContact.firstname || ''} ${selectedSmsContact.lastname || ''}`.trim(),
-      Body: message,
-      WorkerFriendlyName: manager.workerClient ? manager.workerClient.name : '',
-      KnownAgentRoutingFlag: option === SEND_SMS_OPTION[0].value,
-      OpenChatFlag: option === SEND_SMS_OPTION[2].value
-    })
-      .then(() => setMessageSent(true))
-      .catch(() => setError("Error while sending the SMS"))
-      .finally(() => setIsProcessing(false));
+    if (selectedContact) {
+      soundOutboundSms({
+        To: selectedContact.hs_calculated_phone_number,
+        customerName: `${selectedContact.firstname || ''} ${selectedContact.lastname || ''}`.trim(),
+        Body: message,
+        WorkerFriendlyName: manager.workerClient ? manager.workerClient.name : '',
+        KnownAgentRoutingFlag: option === SEND_SMS_OPTION[0].value,
+        OpenChatFlag: option === SEND_SMS_OPTION[2].value
+      })
+        .then(() => setMessageSent(true))
+        .catch(() => setError("Error while sending the SMS"))
+        .finally(() => setIsProcessing(false));
 
-  }, [selectedSmsContact, manager, message, option, soundOutboundSms]);
+    }
+
+
+  }, [selectedContact, manager, message, option, soundOutboundSms]);
 
   const onOptionChangeHandler = useCallback((event) => {
     setOption(event.target.value);
   }, []);
 
-  if (!selectedSmsContact) {
+  if (!selectedContact) {
     return null;
   }
 
@@ -73,12 +78,12 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }: Props) => {
     return (
       <Modal size="wide" ariaLabelledby={MODAL_ID} isOpen onDismiss={closeModal}>
         <ModalHeader>
-          <ModalHeading as="h3" id={MODAL_ID}>Send SMS to {selectedSmsContact.firstname} {selectedSmsContact.lastname}</ModalHeading>
+          <ModalHeading as="h3" id={MODAL_ID}>Send SMS to {selectedContact.firstname} {selectedContact.lastname}</ModalHeading>
         </ModalHeader>
         <Box as="form" onSubmit={onSubmitHandler}>
           <ModalBody>
             <Alert variant='neutral'>
-              <Text as="p">Message successfully sent to {selectedSmsContact.firstname} {selectedSmsContact.lastname}.</Text>
+              <Text as="p">Message successfully sent to {selectedContact.firstname} {selectedContact.lastname}.</Text>
             </Alert>
           </ModalBody>
           <ModalFooter>
@@ -94,7 +99,7 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }: Props) => {
   return (
     <Modal size="wide" ariaLabelledby={MODAL_ID} isOpen onDismiss={closeModal}>
       <ModalHeader>
-        <ModalHeading as="h3" id={MODAL_ID}>Send SMS to {selectedSmsContact.firstname} {selectedSmsContact.lastname}</ModalHeading>
+        <ModalHeading as="h3" id={MODAL_ID}>Send SMS to {selectedContact.firstname} {selectedContact.lastname}</ModalHeading>
       </ModalHeader>
       <Box as="form" onSubmit={onSubmitHandler}>
         <ModalBody>
@@ -117,7 +122,7 @@ const SendSmsModal = ({ selectedSmsContact, handleClose, manager }: Props) => {
           </Box>
           <Box marginBottom="space60">
             <Label htmlFor="phone_number" required>Phone Number</Label>
-            <Input id="phone_number" name="phone_number" type="tel" disabled value={selectedSmsContact.hs_calculated_phone_number} required />
+            <Input id="phone_number" name="phone_number" type="tel" disabled value={selectedContact.hs_calculated_phone_number} required />
           </Box>
           <Label htmlFor="message" required>Message</Label>
           <TextArea value={message || ''} disabled={isProcessing} placeholder="Write your message here..." onChange={messageChangeHandler} id="message" name="message" required />

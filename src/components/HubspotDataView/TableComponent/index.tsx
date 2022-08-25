@@ -17,9 +17,10 @@ type Props = {
   data?: IHubspotResponse;
   manager: Flex.Manager;
   sendSmsHandler: (data: ICustomer) => void;
+  sendWAHandler: (data: ICustomer) => void;
 }
 
-function TableComponent({ isLoading, data, manager, sendSmsHandler }: Props) {
+function TableComponent({ isLoading, data, manager, sendSmsHandler, sendWAHandler }: Props) {
 
   return (
     <Box>
@@ -31,7 +32,7 @@ function TableComponent({ isLoading, data, manager, sendSmsHandler }: Props) {
             }
           </DataGridRow>
         </DataGridHead>
-        <TableBody isLoading={isLoading} data={data} manager={manager} sendSmsHandler={sendSmsHandler} />
+        <TableBody isLoading={isLoading} data={data} manager={manager} sendSmsHandler={sendSmsHandler} sendWAHandler={sendWAHandler} />
       </DataGrid>
     </Box>
   )

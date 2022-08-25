@@ -1,63 +1,74 @@
 import '@twilio-labs/serverless-runtime-types';
 import { Context, ServerlessCallback, ServerlessFunctionSignature } from '@twilio-labs/serverless-runtime-types/types';
-import { functionValidator as FunctionTokenValidator } from 'twilio-flex-token-validator';
+import { validator as TokenValidator } from 'twilio-flex-token-validator';
 const fetch = require('node-fetch');
 
 type MyEvent = {
-  limit: string;
-  after: string;
-  query: string
+  hubspot_id: string;
+  Token: string;
 }
 
 type MyContext = {
+  ACCOUNT_SID: string;
+  AUTH_TOKEN: string;
+}
+
+type HubspotContact = {
+  id: string;
+  properties: {
+    email: string;
+    firstname: string;
+    lastname: string;
+  }
 }
 
 // @ts-ignore
-export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = FunctionTokenValidator(async function (
+export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = /*FunctionTokenValidator(*/async function (
   context: Context<MyContext>,
   event: MyEvent,
   callback: ServerlessCallback
 ) {
 
   const {
-    limit,
-    after,
-    query
+    hubspot_id,
+    Token
   } = event;
 
   try {
 
-    const request = await fetch(`https://api.hubapi.com/crm/v3/objects/contacts/search`, {
-      method: "POST",
+    const openTemplateFile = Runtime.getAssets()['/templates.json'].open;
+    const templateRaw = JSON.parse(openTemplateFile()) as string[];
+
+    const client = context.getTwilioClient();
+
+    const request = await fetch(`https://api.hubapi.com/crm/v3/objects/contacts/${hubspot_id}`, {
+      method: "GET",
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.HUBSPOT_API_KEY}`
-      },
-      body: JSON.stringify({
-        "after": after || 0,
-        "limit": limit || 20,
-        "properties": [
-          "email",
-          "firstname",
-          "lastname",
-          "hs_calculated_phone_number",
-          "hubspot_owner_id"
-        ],
-        "sorts": [
-          {
-            "propertyName": "lastmodifieddate",
-            "direction": "ASCENDING"
-          }
-        ],
-        "query": query
-      })
+      }
     });
 
     if (!request.ok) {
       throw new Error('Error while retrieving data from hubspot');
     }
 
-    const data = await request.json() as object;
+    const contactInformation = await request.json() as HubspotContact;
+
+    const tokenInformation = await TokenValidator(Token, context.ACCOUNT_SID || '', context.AUTH_TOKEN || '') as {
+      identity: string;
+    };
+
+    const workerInformation = await client.conversations.v1.users(tokenInformation.identity).fetch();
+
+    const template = templateRaw.map(item => {
+
+      let formattedItem = item.replace(/{{customerFirstName}}/, contactInformation.properties.firstname);
+      formattedItem = formattedItem.replace(/{{customerLastName}}/, contactInformation.properties.lastname);
+      formattedItem = formattedItem.replace(/{{agentName}}/, workerInformation.friendlyName);
+
+      return formattedItem;
+    });
 
     const response = new Twilio.Response();
     response.appendHeader("Access-Control-Allow-Origin", "*");
@@ -65,7 +76,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = Function
     response.appendHeader("Access-Control-Allow-Headers", "Content-Type");
 
     response.appendHeader("Content-Type", "application/json");
-    response.setBody(data);
+    response.setBody(template);
     // Return a success response using the callback function.
     callback(null, response);
 
@@ -90,4 +101,4 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = Function
     }
 
   }
-})
+}/*)*/
