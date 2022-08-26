@@ -1,9 +1,7 @@
-import { DataGridCell, DataGridRow } from '@twilio-paste/core';
-import { Box } from '@twilio-paste/core/Box';
-import { Button } from '@twilio-paste/core/Button';
+import { DataGridCell, DataGridRow, MediaBody, MediaFigure, MediaObject, Menu, MenuButton, MenuItem, useMenuState } from '@twilio-paste/core';
 import { HelpText } from '@twilio-paste/core/Help-Text';
-import { SMSCapableIcon } from "@twilio-paste/icons/esm/SMSCapableIcon";
-import { VoiceCapableIcon } from "@twilio-paste/icons/esm/VoiceCapableIcon";
+import { ChevronDownIcon } from "@twilio-paste/icons/esm/ChevronDownIcon";
+import { FaPhoneAlt, FaSms, FaWhatsapp } from 'react-icons/fa';
 import { ICustomer } from '../../../../Types';
 
 type Props = {
@@ -16,6 +14,8 @@ type Props = {
 
 function TableRow({ data, actionDisabled, sendSmsHandler, sendWAHandler, initiateCallHandler }: Props) {
 
+  const menu = useMenuState();
+
   return (
     <DataGridRow>
       <DataGridCell>{data.firstname}</DataGridCell>
@@ -23,11 +23,35 @@ function TableRow({ data, actionDisabled, sendSmsHandler, sendWAHandler, initiat
       <DataGridCell>{data.email ? data.email : <HelpText>N/A</HelpText>}</DataGridCell>
       <DataGridCell>{data.hs_calculated_phone_number ? data.hs_calculated_phone_number : <HelpText>N/A</HelpText>}</DataGridCell>
       <DataGridCell>
-        <Box display="flex" columnGap="space40">
-          <Button variant='primary' disabled={actionDisabled} type="button" onClick={() => initiateCallHandler(data)}><VoiceCapableIcon decorative={false} title="Call the customer" /></Button>
-          <Button variant='primary' disabled={actionDisabled} onClick={() => { sendSmsHandler(data) }}><SMSCapableIcon decorative={false} title="Send a Message to customer" /></Button>
-          <Button variant='primary' disabled={actionDisabled} onClick={() => { sendWAHandler(data) }}><SMSCapableIcon decorative={false} title="Send a Whatsapp Message to customer" /></Button>
-        </Box>
+        <MenuButton {...menu} variant="primary" disabled={actionDisabled}>
+          Actions<ChevronDownIcon decorative />
+        </MenuButton>
+        <Menu {...menu} aria-label="Actions">
+          <MenuItem {...menu} disabled={actionDisabled} onClick={() => initiateCallHandler(data)}>
+            <MediaObject verticalAlign="center">
+              <MediaFigure spacing="space20">
+                <FaPhoneAlt />
+              </MediaFigure>
+              <MediaBody>Phone Call</MediaBody>
+            </MediaObject>
+          </MenuItem>
+          <MenuItem {...menu} disabled={actionDisabled} onClick={() => { sendSmsHandler(data) }}>
+            <MediaObject verticalAlign="center">
+              <MediaFigure spacing="space20">
+                <FaSms />
+              </MediaFigure>
+              <MediaBody>SMS Message</MediaBody>
+            </MediaObject>
+          </MenuItem>
+          <MenuItem {...menu} disabled={actionDisabled} onClick={() => { sendWAHandler(data) }}>
+            <MediaObject verticalAlign="center">
+              <MediaFigure spacing="space20">
+                <FaWhatsapp />
+              </MediaFigure>
+              <MediaBody>WhatsApp Message</MediaBody>
+            </MediaObject>
+          </MenuItem>
+        </Menu>
       </DataGridCell>
     </DataGridRow>
   )

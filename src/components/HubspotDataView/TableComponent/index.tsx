@@ -9,7 +9,7 @@ export const TABLE_COLUMNS = [
   "Last Name",
   "Email",
   "Phone Number",
-  "Actions"
+  ""
 ]
 
 type Props = {

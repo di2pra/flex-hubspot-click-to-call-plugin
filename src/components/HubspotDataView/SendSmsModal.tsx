@@ -23,7 +23,7 @@ type Props = {
 
 const SendSmsModal = ({ selectedContact, handleClose, manager }: Props) => {
 
-  const { soundOutboundSms } = useApi({ token: manager.store.getState().flex.session.ssoTokenPayload.token });
+  const { soundOutboundMessage } = useApi({ token: manager.store.getState().flex.session.ssoTokenPayload.token });
   const [option, setOption] = useState(SEND_SMS_OPTION[0].value);
   const [message, setMessage] = useState<string>();
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -49,13 +49,14 @@ const SendSmsModal = ({ selectedContact, handleClose, manager }: Props) => {
     setIsProcessing(true);
 
     if (selectedContact) {
-      soundOutboundSms({
+      soundOutboundMessage({
         To: selectedContact.hs_calculated_phone_number,
         customerName: `${selectedContact.firstname || ''} ${selectedContact.lastname || ''}`.trim(),
         Body: message,
         WorkerFriendlyName: manager.workerClient ? manager.workerClient.name : '',
         KnownAgentRoutingFlag: option === SEND_SMS_OPTION[0].value,
-        OpenChatFlag: option === SEND_SMS_OPTION[2].value
+        OpenChatFlag: option === SEND_SMS_OPTION[2].value,
+        hubspot_contact_id: selectedContact.hs_object_id
       })
         .then(() => setMessageSent(true))
         .catch(() => setError("Error while sending the SMS"))
@@ -64,7 +65,7 @@ const SendSmsModal = ({ selectedContact, handleClose, manager }: Props) => {
     }
 
 
-  }, [selectedContact, manager, message, option, soundOutboundSms]);
+  }, [selectedContact, manager, message, option, soundOutboundMessage]);
 
   const onOptionChangeHandler = useCallback((event) => {
     setOption(event.target.value);

@@ -23,7 +23,7 @@ type HubspotContact = {
 }
 
 // @ts-ignore
-export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = /*FunctionTokenValidator(*/async function (
+export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = FunctionTokenValidator(async function (
   context: Context<MyContext>,
   event: MyEvent,
   callback: ServerlessCallback
@@ -101,4 +101,4 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = /*Functi
     }
 
   }
-}/*)*/
+})

@@ -24,7 +24,7 @@ type Props = {
 
 const SendWAModal = ({ selectedContact, handleClose, manager }: Props) => {
 
-  const { soundOutboundSms, getTemplate } = useApi({ token: manager.store.getState().flex.session.ssoTokenPayload.token });
+  const { soundOutboundMessage, getTemplate } = useApi({ token: manager.store.getState().flex.session.ssoTokenPayload.token });
   const [templateList, setTemplateList] = useState<string[]>();
   const [option, setOption] = useState(SEND_SMS_OPTION[0].value);
   const [message, setMessage] = useState<string>();
@@ -32,14 +32,16 @@ const SendWAModal = ({ selectedContact, handleClose, manager }: Props) => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [messageSent, setMessageSent] = useState<boolean>(false);
   const [error, setError] = useState<string>();
+  const [templateError, setTemplateError] = useState<string>();
 
   useEffect(() => {
     if (selectedContact) {
       setIsLoadingTemplate(true);
       setTemplateList(undefined);
+      setTemplateError(undefined);
       getTemplate({ hubspot_id: selectedContact.hs_object_id })
         .then((data) => { setTemplateList(data) })
-        .catch(() => setError("Error while loading tempaltes"))
+        .catch(() => setTemplateError("Error while loading tempaltes"))
         .finally(() => setIsLoadingTemplate(false));
     }
   }, [selectedContact]);
@@ -59,13 +61,14 @@ const SendWAModal = ({ selectedContact, handleClose, manager }: Props) => {
     setIsProcessing(true);
 
     if (selectedContact) {
-      soundOutboundSms({
+      soundOutboundMessage({
         To: `whatsapp:${selectedContact.hs_calculated_phone_number}`,
         customerName: `${selectedContact.firstname || ''} ${selectedContact.lastname || ''}`.trim(),
         Body: message,
         WorkerFriendlyName: manager.workerClient ? manager.workerClient.name : '',
         KnownAgentRoutingFlag: option === SEND_SMS_OPTION[0].value,
-        OpenChatFlag: option === SEND_SMS_OPTION[2].value
+        OpenChatFlag: option === SEND_SMS_OPTION[2].value,
+        hubspot_contact_id: selectedContact.hs_object_id
       })
         .then(() => setMessageSent(true))
         .catch(() => setError("Error while sending the SMS"))
@@ -74,7 +77,7 @@ const SendWAModal = ({ selectedContact, handleClose, manager }: Props) => {
 
 
 
-  }, [selectedContact, manager, message, option, soundOutboundSms]);
+  }, [selectedContact, manager, message, option, soundOutboundMessage]);
 
   const onOptionChangeHandler = useCallback((event) => {
     setOption(event.target.value);
@@ -183,9 +186,31 @@ const SendWAModal = ({ selectedContact, handleClose, manager }: Props) => {
             <ModalHeading as="h3" id={MODAL_ID}>Send Whatsapp Message to {selectedContact.firstname} {selectedContact.lastname}</ModalHeading>
           </ModalHeader>
           <ModalBody>
-            <Box>
-              <Paragraph>Loading templates..</Paragraph>
+            <Paragraph>Loading templates..</Paragraph>
+            <Box display="flex" alignItems="center" justifyContent="center" >
               <Spinner size="sizeIcon100" decorative={false} title="Loading" />
+            </Box>
+          </ModalBody>
+          <ModalFooter>
+            <ModalFooterActions>
+              <Button variant="secondary" type='button' onClick={closeModal}>Cancel</Button>
+            </ModalFooterActions>
+          </ModalFooter>
+        </Modal>
+      )
+    }
+
+    if (templateError) {
+      return (
+        <Modal size="wide" ariaLabelledby={MODAL_ID} isOpen onDismiss={closeModal}>
+          <ModalHeader>
+            <ModalHeading as="h3" id={MODAL_ID}>Send Whatsapp Message to {selectedContact.firstname} {selectedContact.lastname}</ModalHeading>
+          </ModalHeader>
+          <ModalBody>
+            <Box marginBottom="space60">
+              <Alert variant='error'>
+                <Text as="p">{templateError}</Text>
+              </Alert>
             </Box>
           </ModalBody>
           <ModalFooter>

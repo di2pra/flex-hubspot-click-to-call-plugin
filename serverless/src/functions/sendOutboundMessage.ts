@@ -10,6 +10,7 @@ const openAChatTask: (client: TwilioClient,
   Body: string,
   WorkerConversationIdentity: string,
   channel: string,
+  hubspot_contact_id: string,
   routingProperties: object) => Promise<{
     success: boolean;
     interactionSid: string;
@@ -22,6 +23,7 @@ const openAChatTask: (client: TwilioClient,
     Body,
     WorkerConversationIdentity,
     channel,
+    hubspot_contact_id,
     routingProperties
   ) => {
 
@@ -42,6 +44,7 @@ const openAChatTask: (client: TwilioClient,
           task_channel_unique_name: channel === 'whatsapp' ? 'chat' : channel,
           attributes: {
             name: customerName,
+            hubspot_contact_id: hubspot_contact_id,
             from: To,
             direction: "outbound",
             customerName: customerName,
@@ -134,6 +137,7 @@ type MyEvent = {
   customerName: string;
   WorkerFriendlyName: string;
   OpenChatFlag: string;
+  hubspot_contact_id: string;
   KnownAgentRoutingFlag: boolean;
   Token: string;
 }
@@ -142,6 +146,7 @@ type MyContext = {
   ACCOUNT_SID: string;
   AUTH_TOKEN: string;
   TWILIO_PHONE_NUMBER: string;
+  TWILIO_WA_PHONE_NUMBER: string;
   TASK_ROUTER_WORKSPACE_SID: string;
   TASK_ROUTER_WORKFLOW_SID: string;
   TASK_ROUTER_QUEUE_SID: string;
@@ -159,6 +164,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = Function
     To,
     Body,
     customerName,
+    hubspot_contact_id,
     WorkerFriendlyName,
     Token
   } = event;
@@ -166,7 +172,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = Function
   let { OpenChatFlag, KnownAgentRoutingFlag } = event;
 
   const channel = To.includes('whatsapp') ? 'whatsapp' : 'sms';
-  const From = channel === 'whatsapp' ? 'whatsapp:+19362463025' : context.TWILIO_PHONE_NUMBER;
+  const From = channel === 'whatsapp' ? `whatsapp:${context.TWILIO_WA_PHONE_NUMBER}` : context.TWILIO_PHONE_NUMBER;
   const client = context.getTwilioClient();
 
   console.log(`To : ${To}`);
@@ -203,6 +209,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = Function
         Body,
         identity,
         channel,
+        hubspot_contact_id,
         {
           workspace_sid: context.TASK_ROUTER_WORKSPACE_SID,
           workflow_sid: context.TASK_ROUTER_WORKFLOW_SID,
