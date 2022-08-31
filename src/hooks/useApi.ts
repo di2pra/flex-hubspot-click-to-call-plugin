@@ -21,9 +21,26 @@ const useApi = ({ token }: { token: string }) => {
 
   }, [token]);
 
-  const soundOutboundSms = useCallback(async ({ To, customerName, Body, WorkerFriendlyName, KnownAgentRoutingFlag, OpenChatFlag }) => {
+  const getTemplate = useCallback(async ({ hubspot_id }) => {
 
-    const request = await fetch(`${process.env.FLEX_APP_TWILIO_SERVERLESS_DOMAIN}/sendOutboundSms`, {
+    const request = await fetch(`${process.env.FLEX_APP_TWILIO_SERVERLESS_DOMAIN}/template`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        hubspot_id,
+        Token: token
+      })
+    });
+
+    return await request.json();
+
+  }, [token]);
+
+  const soundOutboundMessage = useCallback(async ({ To, customerName, Body, WorkerFriendlyName, KnownAgentRoutingFlag, OpenChatFlag, hubspot_contact_id }) => {
+
+    const request = await fetch(`${process.env.FLEX_APP_TWILIO_SERVERLESS_DOMAIN}/sendOutboundMessage`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -35,6 +52,7 @@ const useApi = ({ token }: { token: string }) => {
         WorkerFriendlyName,
         KnownAgentRoutingFlag,
         OpenChatFlag,
+        hubspot_contact_id,
         Token: token
       })
     });
@@ -43,9 +61,12 @@ const useApi = ({ token }: { token: string }) => {
 
   }, [token]);
 
+
+
   return {
     getData,
-    soundOutboundSms
+    soundOutboundMessage,
+    getTemplate
   }
 
 }

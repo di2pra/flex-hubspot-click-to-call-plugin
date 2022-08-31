@@ -1,10 +1,10 @@
-# Twilio Flex Hubspot Click-to-Call & Outbound SMS Plugin
+# Twilio Flex Hubspot Click-to-Call & Outbound SMS & WhatsApp Plugin
 
 A Twilio Flex Plugin to leverage your customer data from Hubspot and initiate an outbound call or an outbound SMS on Flex. This plugin uses the [Hubspot APIs](https://developers.hubspot.com/docs/api/overview) to retrieve your customer data from Hubspot. Twilio Serverless is used for the the backend.
 
 ![Screenshot of the Twilio Flex Hubspot Click-to-Call & Outbound SMS Plugin](screenshot.png "Screenshot of the Twilio Flex Hubspot Click-to-Call & Outbound SMS Plugin")
 
-## Prerequisite
+# Prerequisite
 
 - Twilio Flex instance with Flex UI 2.0
 - Twilio Phone Number
@@ -26,7 +26,9 @@ Finally, install the [Serverless plugin extension](https://github.com/twilio-lab
 twilio plugins:install @twilio-labs/plugin-serverless
 ```
 
-## Installation
+# Installation
+
+## Serverless Function
 
 First, you need to deploy the Twilio Serverless functions.
 
@@ -36,7 +38,7 @@ cd serverless
 cp .env.sample .env
 ```
 
-Update the .env (located in the serverless folder) with your values :
+Update the **.env** file (located in the serverless folder) with your values :
 ```bash
 ACCOUNT_SID=<Your Value>
 AUTH_TOKEN=<Your Value>
@@ -48,12 +50,30 @@ TASK_ROUTER_QUEUE_SID=<Your Value>
 TWILIO_PHONE_NUMBER=<Your Value>
 ```
 
-Next, deploy the serverless functions by running:
+Update the file **src/assets/templates.private.json** with a JSON Array of string containing all your pre-approved WhatsApp Templates :
+```json
+[
+  "My first template with {{customerFirstName}} and {{customerLastName}} and {{agentName}}.",
+  "Hello {{customerFirstName}} {{customerLastName}}, it's {{agentName}} from WhatsApp, feel free to reach out to me if you need more help"
+]
+```
+
+The available dynamic parameters are :
+| Parameter      | Value |
+| ----------- | ----------- |
+| {{customerFirstName}}      | Customer Firstname from Hubspot       |
+| {{customerLastName}}   | Customer Lastname from Hubspot        |
+| {{agentName}}   | Flex Agent Name        |
+
+
+Finally, deploy the serverless function by running:
 ```bash
 npm run deploy
 ```
 
 After the deployment, copy and keep the domain URL somewhere (example: `https://flex-hubspot-click-to-call-serverless-2348-xxx.twil.io`)
+
+## Twilio Flex Plugin
 
 Now you need to deploy the plugin, move to the root folder, and make a copy of the **.env.sample** file by running:
 ```bash
@@ -75,7 +95,7 @@ Finally, release the flex plugin by running:
 twilio flex:plugins:release --plugin flex-hubspot-click-to-call-plugin@1.0.0 --name "NAME OF THE RELEASE" --description "DESCRIPTION OF THE RELEASE"
 ```
 
-## Development
+# Development
 
 First Move to the serverless folder and make a copy of the file **.env.sample** by running:
 ```bash
@@ -83,7 +103,7 @@ cd serverless
 cp .env.sample .env
 ```
 
-Update the .env (located in the serverless folder) with your values :
+Update the **.env** (located in the serverless folder) with your values :
 ```bash
 ACCOUNT_SID=<Your Value>
 AUTH_TOKEN=<Your Value>

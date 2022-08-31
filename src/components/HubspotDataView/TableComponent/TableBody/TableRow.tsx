@@ -1,19 +1,19 @@
-import { DataGridCell, DataGridRow } from '@twilio-paste/core';
-import { Box } from '@twilio-paste/core/Box';
-import { Button } from '@twilio-paste/core/Button';
+import { Button, DataGridCell, DataGridRow, Stack, useMenuState } from '@twilio-paste/core';
 import { HelpText } from '@twilio-paste/core/Help-Text';
-import { SMSCapableIcon } from "@twilio-paste/icons/esm/SMSCapableIcon";
-import { VoiceCapableIcon } from "@twilio-paste/icons/esm/VoiceCapableIcon";
+import { FaPhoneAlt, FaSms, FaWhatsapp } from 'react-icons/fa';
 import { ICustomer } from '../../../../Types';
 
 type Props = {
   data: ICustomer;
   actionDisabled: boolean;
   sendSmsHandler: (data: ICustomer) => void;
+  sendWAHandler: (data: ICustomer) => void;
   initiateCallHandler: (data: ICustomer) => void;
 }
 
-function TableRow({ data, actionDisabled, sendSmsHandler, initiateCallHandler }: Props) {
+function TableRow({ data, actionDisabled, sendSmsHandler, sendWAHandler, initiateCallHandler }: Props) {
+
+  const menu = useMenuState();
 
   return (
     <DataGridRow>
@@ -22,10 +22,11 @@ function TableRow({ data, actionDisabled, sendSmsHandler, initiateCallHandler }:
       <DataGridCell>{data.email ? data.email : <HelpText>N/A</HelpText>}</DataGridCell>
       <DataGridCell>{data.hs_calculated_phone_number ? data.hs_calculated_phone_number : <HelpText>N/A</HelpText>}</DataGridCell>
       <DataGridCell>
-        <Box display="flex" columnGap="space40">
-          <Button variant='primary' disabled={actionDisabled} type="button" onClick={() => initiateCallHandler(data)}><VoiceCapableIcon decorative={false} title="Call the customer" /></Button>
-          <Button variant='primary' disabled={actionDisabled} onClick={() => { sendSmsHandler(data) }}><SMSCapableIcon decorative={false} title="Send a Message to customer" /></Button>
-        </Box>
+        <Stack orientation="horizontal" spacing="space30" >
+          <Button variant="primary" size="small" disabled={actionDisabled} onClick={() => initiateCallHandler(data)}><FaPhoneAlt /> Call</Button>
+          <Button variant="primary" size="small" disabled={actionDisabled} onClick={() => sendSmsHandler(data)}><FaSms /> SMS</Button>
+          <Button variant="primary" size="small" disabled={actionDisabled} onClick={() => sendWAHandler(data)}><FaWhatsapp /> WhatsApp</Button>
+        </Stack>
       </DataGridCell>
     </DataGridRow>
   )

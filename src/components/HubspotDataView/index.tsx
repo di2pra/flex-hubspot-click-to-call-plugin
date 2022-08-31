@@ -7,6 +7,7 @@ import useApi from '../../hooks/useApi';
 import { ICustomer, IHubspotResponse, ITableDataState } from '../../Types';
 import { PAGE_SIZE_OPTIONS } from './constants';
 import SendSmsModal from './SendSmsModal';
+import SendWAModal from './SendWAModal';
 import TableComponent from './TableComponent';
 import TableErrorBox from './TableErrorBox';
 import TableMenu from './TableMenu';
@@ -28,6 +29,7 @@ const HubspotDataView = ({ manager }: { manager: Flex.Manager }) => {
     query: ''
   });
   const [selectedSmsContact, setSelectedSmsContact] = useState<ICustomer>();
+  const [selectedWAContact, setSelectedWAContact] = useState<ICustomer>();
 
   React.useEffect(() => {
 
@@ -46,6 +48,10 @@ const HubspotDataView = ({ manager }: { manager: Flex.Manager }) => {
     setSelectedSmsContact(data);
   }, []);
 
+  const sendWAHandler = React.useCallback((data: ICustomer) => {
+    setSelectedWAContact(data);
+  }, []);
+
 
   const onPaginateHandler = React.useCallback((newAfter) => {
     setDataState(prevState => { return { ...prevState, after: newAfter } });
@@ -53,16 +59,18 @@ const HubspotDataView = ({ manager }: { manager: Flex.Manager }) => {
 
   const handleCloseModel = React.useCallback(() => {
     setSelectedSmsContact(undefined);
+    setSelectedWAContact(undefined);
   }, []);
 
   return (
     <>
-      <SendSmsModal selectedSmsContact={selectedSmsContact} manager={manager} handleClose={handleCloseModel} />
+      <SendSmsModal selectedContact={selectedSmsContact} manager={manager} handleClose={handleCloseModel} />
+      <SendWAModal selectedContact={selectedWAContact} manager={manager} handleClose={handleCloseModel} />
       <Box padding="space70" >
         <Stack orientation="vertical" spacing="space50">
           <TableErrorBox error={error} />
           <TableMenu dataState={dataState} setDataState={setDataState} />
-          <TableComponent isLoading={isLoading} data={data} manager={manager} sendSmsHandler={sendSmsHandler} />
+          <TableComponent isLoading={isLoading} data={data} manager={manager} sendSmsHandler={sendSmsHandler} sendWAHandler={sendWAHandler} />
           <TablePagination isLoading={isLoading} data={data} dataState={dataState} onPaginateHandler={onPaginateHandler} />
         </Stack>
       </Box>

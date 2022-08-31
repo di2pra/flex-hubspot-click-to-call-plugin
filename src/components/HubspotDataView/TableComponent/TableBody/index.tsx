@@ -13,9 +13,10 @@ type Props = {
   data?: IHubspotResponse;
   manager: Flex.Manager;
   sendSmsHandler: (data: ICustomer) => void;
+  sendWAHandler: (data: ICustomer) => void;
 }
 
-function TableBody({ isLoading, data, manager, sendSmsHandler }: Props) {
+function TableBody({ isLoading, data, manager, sendSmsHandler, sendWAHandler }: Props) {
 
   const [actionDisabled, setActionDisabled] = useState(manager.workerClient ? !manager.workerClient.activity.available : true);
 
@@ -95,7 +96,7 @@ function TableBody({ isLoading, data, manager, sendSmsHandler }: Props) {
     <DataGridBody>
       {
         data.results.map((item: any, key: number) => {
-          return (<TableRow key={key} data={item.properties} actionDisabled={actionDisabled || !item.properties.hs_calculated_phone_number} sendSmsHandler={sendSmsHandler} initiateCallHandler={initiateCallHandler} />)
+          return (<TableRow key={key} data={item.properties} actionDisabled={actionDisabled || !item.properties.hs_calculated_phone_number} sendSmsHandler={sendSmsHandler} sendWAHandler={sendWAHandler} initiateCallHandler={initiateCallHandler} />)
         })
       }
     </DataGridBody>
