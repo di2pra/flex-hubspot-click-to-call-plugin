@@ -38,7 +38,7 @@ cd serverless
 cp .env.sample .env
 ```
 
-Update the .env file (located in the serverless folder) with your values :
+Update the **.env** file (located in the serverless folder) with your values :
 ```bash
 ACCOUNT_SID=<Your Value>
 AUTH_TOKEN=<Your Value>
@@ -50,7 +50,7 @@ TASK_ROUTER_QUEUE_SID=<Your Value>
 TWILIO_PHONE_NUMBER=<Your Value>
 ```
 
-Update the file src/assets/templates.private.json with a JSON Array of string containing all your pre-approved WhatsApp Templates :
+Update the file **src/assets/templates.private.json** with a JSON Array of string containing all your pre-approved WhatsApp Templates :
 ```json
 [
   "My first template with {{customerFirstName}} and {{customerLastName}} and {{agentName}}.",
@@ -103,7 +103,7 @@ cd serverless
 cp .env.sample .env
 ```
 
-Update the .env (located in the serverless folder) with your values :
+Update the **.env** (located in the serverless folder) with your values :
 ```bash
 ACCOUNT_SID=<Your Value>
 AUTH_TOKEN=<Your Value>
