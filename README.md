@@ -114,6 +114,7 @@ TASK_ROUTER_WORKSPACE_SID=<Your Value>
 TASK_ROUTER_WORKFLOW_SID=<Your Value>
 TASK_ROUTER_QUEUE_SID=<Your Value>
 TWILIO_PHONE_NUMBER=<Your Value>
+TWILIO_WA_PHONE_NUMBER=<Your Value>
 ```
 
 Next, start the twilio serverless on your local machine by running:

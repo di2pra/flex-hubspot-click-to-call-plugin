@@ -66,7 +66,7 @@ const HubspotDataView = ({ manager }: { manager: Flex.Manager }) => {
     <>
       <SendSmsModal selectedContact={selectedSmsContact} manager={manager} handleClose={handleCloseModel} />
       <SendWAModal selectedContact={selectedWAContact} manager={manager} handleClose={handleCloseModel} />
-      <Box padding="space70" >
+      <Box paddingX="space70" >
         <Stack orientation="vertical" spacing="space50">
           <TableErrorBox error={error} />
           <TableMenu dataState={dataState} setDataState={setDataState} />
