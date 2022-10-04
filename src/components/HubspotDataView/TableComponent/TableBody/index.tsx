@@ -70,7 +70,7 @@ function TableBody({ isLoading, data, manager, sendSmsHandler, sendWAHandler }: 
         <DataGridRow>
           <DataGridCell>
             <Box display="flex" justifyContent="center">
-              <Text as="p">No Customer</Text>
+              <Text as="p">No Contact</Text>
             </Box>
           </DataGridCell>
         </DataGridRow>

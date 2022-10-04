@@ -13,7 +13,7 @@ function TableErrorBox({ error }: Props) {
   }
 
   return (
-    <Box>
+    <Box marginTop="space50">
       <Alert variant='error'>
         <Text as="p">{error}</Text>
       </Alert>
