@@ -1,6 +1,6 @@
 {
   "name": "flex-hubspot-click-to-call-plugin",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "private": true,
   "scripts": {
     "postinstall": "flex-plugin pre-script-check"
