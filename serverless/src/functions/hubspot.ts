@@ -1,5 +1,5 @@
 import '@twilio-labs/serverless-runtime-types';
-import { Context, ServerlessCallback, ServerlessFunctionSignature } from '@twilio-labs/serverless-runtime-types/types';
+import { Context, ServerlessCallback } from '@twilio-labs/serverless-runtime-types/types';
 import { functionValidator as FunctionTokenValidator } from 'twilio-flex-token-validator';
 const fetch = require('node-fetch');
 
@@ -14,7 +14,7 @@ type MyContext = {
 
 // @ts-ignore
 export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = FunctionTokenValidator(async function (
-  context: Context<MyContext>,
+  _: Context<MyContext>,
   event: MyEvent,
   callback: ServerlessCallback
 ) {

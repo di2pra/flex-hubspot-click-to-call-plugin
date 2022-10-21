@@ -76,8 +76,9 @@ After the deployment, copy and keep the domain URL somewhere (example: `https://
 
 ## Twilio Flex Plugin
 
-Now you need to deploy the plugin, move to the root folder, and make a copy of the **.env.sample** file by running:
+Now you need to deploy the plugin, move to the plugin folder, and make a copy of the **.env.sample** file by running:
 ```bash
+cd plugin
 cp .env.sample .env
 ```
 
