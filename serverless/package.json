@@ -16,14 +16,14 @@
     "@twilio-labs/serverless-runtime-types": "^1.1",
     "@twilio/runtime-handler": "1.2.3",
     "node-fetch": "^2.6.7",
-    "nodemon": "^2.0.20",
     "twilio": "^3.79.0",
     "twilio-flex-token-validator": "^1.5.6"
   },
   "devDependencies": {
     "copyfiles": "^2.2.0",
     "twilio-run": "^3.4.2",
-    "typescript": "^3.8"
+    "typescript": "^3.8",
+    "nodemon": "^2.0.20"
   },
   "nodemonConfig": {
     "ext": "ts",
