@@ -123,9 +123,9 @@ Next, start the twilio serverless on your local machine by running:
 npm start
 ```
 
-Now you need to start the Flex plugin, move to the root folder, and make a copy of the **.env.sample** file by running:
+Now you need to start the Flex plugin, move to the plugin folder, and make a copy of the **.env.sample** file by running:
 ```bash
-cd ../
+cd plugin
 cp .env.sample .env
 ```
 
