@@ -115,7 +115,7 @@ const sendOutboundMessage: (
       });
 
     // Point the channel to Studio
-    const webhook = client.conversations
+    await client.conversations
       .conversations(channel.sid)
       .webhooks.create({
         target: "studio",
