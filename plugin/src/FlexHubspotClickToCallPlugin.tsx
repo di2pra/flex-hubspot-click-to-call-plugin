@@ -35,7 +35,7 @@ export default class FlexHubspotClickToCallPlugin extends FlexPlugin {
     );
 
     flex.SideNav.Content.add(
-      <SideNavButton key="side-nav-button-key" />
+      <SideNavButton key="hubspot-table-side-nav-button-key" />
     );
   }
 }

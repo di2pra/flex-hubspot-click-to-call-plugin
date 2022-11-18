@@ -68,9 +68,9 @@ function TableBody({ isLoading, data, manager, sendSmsHandler, sendWAHandler }: 
     return (
       <DataGridBody>
         <DataGridRow>
-          <DataGridCell>
+          <DataGridCell colSpan={TABLE_COLUMNS.length}>
             <Box display="flex" justifyContent="center">
-              <Text as="p">No Contact</Text>
+              <Text as="p">No Customer</Text>
             </Box>
           </DataGridCell>
         </DataGridRow>
@@ -82,7 +82,7 @@ function TableBody({ isLoading, data, manager, sendSmsHandler, sendWAHandler }: 
     return (
       <DataGridBody>
         <DataGridRow>
-          <DataGridCell>
+          <DataGridCell colSpan={TABLE_COLUMNS.length}>
             <Box display="flex" justifyContent="center">
               <Text as="p">No Customer</Text>
             </Box>

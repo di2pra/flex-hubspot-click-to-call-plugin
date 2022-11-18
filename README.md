@@ -1,3 +1,6 @@
+# Disclaimer
+
+**This software is to be considered "sample code", a Type B Deliverable, and is delivered "as-is" to the user. Twilio bears no responsibility to support the use or implementation of this software.**
 # Twilio Flex Hubspot Click-to-Call & Outbound SMS & WhatsApp Plugin
 
 A Twilio Flex Plugin to leverage your customer data from Hubspot and initiate an outbound call or an outbound SMS / WhatsApp on Flex. This plugin uses the [Hubspot APIs](https://developers.hubspot.com/docs/api/overview) to retrieve your customer data from Hubspot. Twilio Serverless is used for the the backend.
